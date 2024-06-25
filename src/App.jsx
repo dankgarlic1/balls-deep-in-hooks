@@ -1,47 +1,43 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 
 function App() {
+  const [render, setRender] = useState(true);
+  useEffect(() => {
+    setInterval(() => {
+      setRender((r) => !r);
+    }, 5000);
+  });
   return (
     <>
-      {/* <MyComponent/> */}
-      <MyComponent1 />
+      {render ? <MyComponent1 /> : <div></div>}
+      {/* <MyComponent1 /> */}
     </>
   );
 }
 
 function MyComponent() {
-  const [count, setCount] = useState(0);
-  const incrementCount = () => {
-    setCount(count + 1);
-  };
-  return (
-    <div>
-      <p>{count}</p>
-      <button onClick={incrementCount}>Increment</button>
-    </div>
-  );
+  useEffect(() => {
+    console.error("Component mounted");
+    return () => {
+      console.log("component unmounted");
+    };
+  }, []);
+  return <div>From inside my component</div>;
 }
 
 class MyComponent1 extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { count: 0 };
+  componentDidMount() {
+    console.log("mounted");
+  }
+  componentWillUnmount() {
+    console.log("unmounted");
   }
 
-  incrementCount1 = () => {
-    this.setState({ count: this.state.count + 1 });
-  };
-
   render() {
-    return (
-      <div>
-        <p>{this.state.count}</p>
-        <button onClick={this.incrementCount1}>Increment</button>
-      </div>
-    );
+    return <div>Hi there</div>;
   }
 }
 export default App;
